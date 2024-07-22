@@ -6,8 +6,10 @@
     <title>Create Recipe</title>
 </head>
 <body>
-	<%@ include file="LogoutPartialView.jsp" %>
-    <a href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
+	<div class="d-flex justify-content-start mb-3">
+        <a class="btn btn-primary" href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
+        <jsp:include page="LogoutPartialView.jsp" />
+    </div>
     <form action="CreateRecipeServlet" method="POST">
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>

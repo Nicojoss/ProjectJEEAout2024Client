@@ -9,8 +9,10 @@
 </head>
 <body>
     <h2>Your Recipes</h2>
-	<%@ include file="LogoutPartialView.jsp" %>
-	<a href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
+	<div class="d-flex justify-content-start mb-3">
+        <a class="btn btn-primary" href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
+        <jsp:include page="LogoutPartialView.jsp" />
+    </div>
     <% if (request.getAttribute("recipes") != null && ((ArrayList<Recipe>)request.getAttribute("recipes")).size() > 0) { %>
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
