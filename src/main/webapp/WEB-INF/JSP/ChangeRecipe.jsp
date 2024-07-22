@@ -52,7 +52,7 @@
     </script>
 </head>
 <body>
-    <a href="/ProjectJEE2023Client/HomeServlet">Home Page</a>
+    <a href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
     <form action="ChangeRecipeServlet" method="POST">
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>

@@ -7,7 +7,7 @@
 <title>Manage account page</title>
 </head>
 <body>
-	<a href="/ProjectJEE2023Client/HomeServlet">Home Page</a>
+	<a href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
 	<%@ include file="LogoutPartialView.jsp" %>
         <form action="ManageAccountServlet" method="POST">
 		<table border="1" cellspacing="0" cellpadding="5">

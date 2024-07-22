@@ -7,7 +7,7 @@
 </head>
 <body>
 	<%@ include file="LogoutPartialView.jsp" %>
-    <a href="/ProjectJEE2023Client/HomeServlet">Home Page</a>
+    <a href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
     <form action="CreateRecipeServlet" method="POST">
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
