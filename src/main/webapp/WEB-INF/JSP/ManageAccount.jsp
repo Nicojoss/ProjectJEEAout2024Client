@@ -7,6 +7,7 @@
 <title>Manage account page</title>
 </head>
 <body>
+	<h1>Manage your account</h1>
 	<div class="d-flex justify-content-start mb-3">
         <a class="btn btn-primary" href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
         <jsp:include page="LogoutPartialView.jsp" />
