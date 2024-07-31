@@ -14,6 +14,8 @@ import org.json.JSONObject;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
+import be.jossart.javabeans.Ingredient;
+import be.jossart.javabeans.Recipe;
 import be.jossart.javabeans.RecipeIngredient;
 
 public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
@@ -23,16 +25,17 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
 
     @Override
     public boolean create(RecipeIngredient obj) {
-        MultivaluedMap<String, String> paramsPost = new MultivaluedMapImpl();
-        paramsPost.add("idRecipe", Integer.toString(obj.getIdRecipe()));
-        paramsPost.add("idIngredient", Integer.toString(obj.getIdIngredient()));
-        paramsPost.add("quantity", Double.toString(obj.getQuantity()));
+    	JSONObject json = new JSONObject();
+        json.put("recipeId", obj.getRecipe().getIdRecipe());
+        json.put("ingredientId", obj.getIngredient().getIdIngredient());
+        json.put("quantity", obj.getQuantity());
 
         try {
             ClientResponse res = this.resource
-                    .path("recipeIngredient/create")
+                    .path("recipeIngredient")
+                    .type(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, paramsPost);
+                    .post(ClientResponse.class, json.toString());
 
             return res.getStatus() == 201;
         } catch (Exception ex) {
@@ -43,17 +46,14 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
 
     @Override
     public boolean delete(RecipeIngredient obj) {
-    	MultivaluedMap<String, String> paramsDelete = new MultivaluedMapImpl();
-    	paramsDelete.add("idRecipe", String.valueOf(obj.getIdRecipe()));
-    	paramsDelete.add("idIngredient", String.valueOf(obj.getIdIngredient()));
-
         try {
             ClientResponse res = this.resource
-                    .path("recipeIngredient/delete")
+                    .path("recipeIngredient/"+obj.getRecipe().getIdRecipe()+"/"+
+                    		obj.getIngredient().getIdIngredient())
                     .accept(MediaType.APPLICATION_JSON)
-                    .delete(ClientResponse.class,paramsDelete);
+                    .delete(ClientResponse.class);
 
-            return res.getStatus() == 204;
+            return res.getStatus() == 200;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return false;
@@ -62,16 +62,17 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
 
     @Override
     public boolean update(RecipeIngredient obj) {
-        MultivaluedMap<String, String> paramsPut = new MultivaluedMapImpl();
-        paramsPut.add("idRecipe", Integer.toString(obj.getIdRecipe()));
-        paramsPut.add("idIngredient", Integer.toString(obj.getIdIngredient()));
-        paramsPut.add("quantity", Double.toString(obj.getQuantity()));
+        JSONObject json = new JSONObject();
+        json.put("recipeId", obj.getRecipe().getIdRecipe());
+        json.put("ingredientId", obj.getIngredient().getIdIngredient());
+        json.put("quantity", obj.getQuantity());
 
         try {
             ClientResponse res = this.resource
-                    .path("recipeIngredient/update")
+                    .path("recipeIngredient")
+                    .type(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .put(ClientResponse.class, paramsPut);
+                    .put(ClientResponse.class, json.toString());
 
             return res.getStatus() == 200;
         } catch (Exception ex) {
@@ -89,7 +90,7 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
     public RecipeIngredient find(int idRecipe, int idIngredient) {
         try {
             ClientResponse res = this.resource
-                    .path("recipeIngredient2/get/" + idRecipe + "/" + idIngredient)
+                    .path("recipeIngredient/" + idRecipe + "/" + idIngredient)
                     .accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
 
@@ -101,7 +102,9 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
                 int ingredientId = json.getInt("idIngredient");
                 double quantity = json.getDouble("quantity");
 
-                RecipeIngredient recipeIngredient = new RecipeIngredient(recipeId, ingredientId, quantity, null, null);
+                RecipeIngredient recipeIngredient = new RecipeIngredient(quantity, 
+                		new Ingredient(ingredientId,null,null,null),
+                		new Recipe(recipeId,null,null,null,null,null));
 
                 return recipeIngredient;
             } else if (res.getStatus() == 404) {
@@ -122,9 +125,9 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
         return null;
     }
 
-    public RecipeIngredient findId(RecipeIngredient recipeIngredient) {
+    /*public RecipeIngredient findId(RecipeIngredient recipeIngredient) {
         try {
-            int idRecipe = recipeIngredient.getIdRecipe();
+            int idRecipe = recipeIngredient.getRecipe().getIdRecipe();
             double quantity = recipeIngredient.getQuantity();
 
             ClientResponse response = this.resource
@@ -137,7 +140,7 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
                 JSONObject json = new JSONObject(responseJson);
 
                 int retrievedIngredientId = json.getInt("idIngredient");
-                return new RecipeIngredient(recipeIngredient.getIdRecipe(), retrievedIngredientId, recipeIngredient.getQuantity(), null, null);
+                //return new RecipeIngredient(recipeIngredient.getRecipe().getIdRecipe(), retrievedIngredientId, recipeIngredient.getQuantity(), null, null);
             } else if (response.getStatus() == 404) {
                 return null;
             } else {
@@ -177,5 +180,6 @@ public class RecipeIngredientDAO extends DAO<RecipeIngredient> {
             return Collections.emptyList();
         }
     }
+    */
 }
 

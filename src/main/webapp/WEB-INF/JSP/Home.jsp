@@ -27,7 +27,7 @@
     <% } else { %>
     	<%@ include file="LogoutPartialView.jsp" %>
         <button onclick="window.location='/ProjectJEEAout2024Client/ManageAccountServlet'">Manage my account</button>
-        <button onclick="window.location='/ProjectJEEAout2024Client/CreateRecipeServlet'">Create a new recipe</button>
+        <button onclick="window.location='/ProjectJEEAout2024Client/CreateIngredientRecipeStepNumberServlet'">Create a new recipe</button>
         <button onclick="window.location='/ProjectJEEAout2024Client/ConsultOwnRecipeServlet'">Consult your recipe</button>
     <% } %>
     <h1>Rechercher une recette :</h1> <br>

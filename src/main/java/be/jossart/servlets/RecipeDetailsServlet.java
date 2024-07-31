@@ -29,20 +29,20 @@ public class RecipeDetailsServlet extends HttpServlet {
         Recipe recipe = Recipe.find(idRecipe);
         Person person = Person.find(recipe.getPerson().getIdPerson());
         recipe.setPerson(person);
-        List<Integer> idsRecipeIngredients = RecipeIngredient.findIds(idRecipe);
+        //List<Integer> idsRecipeIngredients = RecipeIngredient.findIds(idRecipe);
         List<Integer> idsRecipeSteps = RecipeStep.findIds(idRecipe);
 
         ArrayList<RecipeIngredient> recipeIngredients = new ArrayList<>();
         ArrayList<RecipeStep> recipeSteps = new ArrayList<>();
 
-        for (int idRecipeIngredient : idsRecipeIngredients) {
+        /*for (int idRecipeIngredient : idsRecipeIngredients) {
             RecipeIngredient recipeIngredient = RecipeIngredient.find(idRecipe,idRecipeIngredient);
 
-            Ingredient ingredient = Ingredient.find(recipeIngredient.getIdIngredient());
+            Ingredient ingredient = Ingredient.find(recipeIngredient.getIngredient().getIdIngredient());
             recipeIngredient.setIngredient(ingredient);
 
             recipeIngredients.add(recipeIngredient);
-        }
+        }*/
 
         for (int idRecipeStep : idsRecipeSteps) {
             RecipeStep recipeStep = RecipeStep.find(idRecipeStep);

@@ -4,10 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Recipe</title>
+    <title>Recipe creation</title>
 </head>
 <body>
 	<%@ include file="LogoutPartialView.jsp" %>
-    <a href="/ProjectJEE2023Client/HomeServlet">Home Page</a>
+    <a href="/ProjectJEE2024Client/LogInServlet">Home Page</a>
+    <%if (request.getAttribute("success") != null) {%>
+       <div class="alert alert-success">
+       <p><%= request.getAttribute("success")%></p> 
+       </div>
+    <% } %>
+    <% if (request.getAttribute("fail") != null) {%>
+        <div class="alert alert-danger">
+      	<p><%= request.getAttribute("fail")%></p> 
+       	</div>
+    <% } %>
     <form action="CreateRecipeServlet" method="POST">
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
@@ -29,44 +40,63 @@
                 </td>
             </tr>
 			<tr>
-    			<td colspan="2">
-       				<h3>Ingredients</h3>
-    			</td>
-			</tr>
-			<tr id="ingredientFields">
-    			<td>Ingredient Name: </td>
-    			<td>
-        			<input type="text" name="ingredientName" value="" size="20" required/>
-    			</td>
-			</tr>
-			<tr>
-    		<td>Ingredient Type: </td>
-    			<td>
-        			<select name="ingredientType">
-            		<option value="Fruit">Fruit</option>
-            		<option value="Vegetable">Vegetable</option>
-            		<option value="Spicy">Spicy</option>
-            		<option value="Other" selected>Other</option>
-        			</select>
-    			</td>
-			</tr>
-			<tr>
-    			<td>Ingredient Quantity: </td>
-    			<td>
-        			<input type="text" name="ingredientQuantity" value="" size="10"/>
-    			</td>
-			</tr>
+                <td colspan="2">
+                    <h3>Ingredients</h3>
+                </td>
+            </tr>
+            <%
+            	if (request.getAttribute("ingredientNumber") != null) {
+            	for(int i = 0; i < (Integer)request.getAttribute("ingredientNumber"); i++) { 
+            %>
+           	<tr>
+           		<td>Ingredient <%= i + 1 %></td>
+           		<td></td>
+           	</tr>
+            <tr>
+                <td>Ingredient Name: </td>
+                <td>
+                    <input type="text" name="ingredientName<%= i %>" value="" size="20" required/>
+                </td>
+            </tr>
+            <tr>
+                <td>Ingredient Type: </td>
+                <td>
+                    <select name="ingredientType<%= i %>">
+                        <option value="Fruit">Fruit</option>
+                        <option value="Vegetable">Vegetable</option>
+                        <option value="Spicy">Spicy</option>
+                        <option value="Other" selected>Other</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Ingredient Quantity: </td>
+                <td>
+                    <input type="text" name="ingredientQuantity<%= i %>" value="" size="10"/>
+                </td>
+            </tr>
+            <% }} %>
             <tr>
                 <td colspan="2">
                     <h3>Recipe Steps</h3>
                 </td>
             </tr>
-            <tr id="recipeStepFields">
+            <%
+            	if (request.getAttribute("recipeStepNumber") != null) {
+                for(int i = 0; i < (Integer)request.getAttribute("recipeStepNumber"); i++) {
+            %>
+            <tr>
+            	<td>Recipe Step <%= i + 1 %></td>
+            	<td></td>
+            </tr>
+            <tr>
+            	
                 <td>Step Instruction: </td>
                 <td>
-                    <textarea name="stepInstruction" rows="3" cols="30"></textarea>
+                    <textarea name="stepInstruction<%= i %>" rows="3" cols="30"></textarea>
                 </td>
             </tr>
+            <% }} %>
             <tr>
                 <td colspan="2" align="center">
                     <input type="submit" name="submit" value="Create Recipe"/>

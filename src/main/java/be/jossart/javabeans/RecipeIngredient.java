@@ -10,27 +10,14 @@ import be.jossart.dao.RecipeIngredientDAO;
 public class RecipeIngredient implements Serializable{
 	//ATTRIBUTES
 	private static final long serialVersionUID = -3286148896425585540L;
-	private int idIngredient;
-	private int idRecipe;
 	private double quantity;
 	private Ingredient ingredient;
 	private Recipe recipe;
 	private static final DAO<RecipeIngredient> recipeIngredientDAO = new RecipeIngredientDAO();
 	//CTOR
 	public RecipeIngredient() {}
-	public RecipeIngredient(int idRecipe, int idIngredient, double quantity,
-			Ingredient ingredient, Recipe recipe) {
+	public RecipeIngredient(double quantity, Ingredient ingredient, Recipe recipe) {
 		super();
-		this.idIngredient = idIngredient;
-		this.idRecipe = idRecipe;
-		this.quantity = quantity;
-		this.ingredient = ingredient;
-		this.recipe = recipe;
-	}
-	public RecipeIngredient(int idRecipe, double quantity,Ingredient ingredient,
-			Recipe recipe) {
-		super();
-		this.idRecipe = idRecipe;
 		this.quantity = quantity;
 		this.ingredient = ingredient;
 		this.recipe = recipe;
@@ -49,27 +36,15 @@ public class RecipeIngredient implements Serializable{
 		RecipeIngredientDAO dao = new RecipeIngredientDAO();
 		return dao.find(idRecipe, idIngredient);
 	}
-	public static RecipeIngredient findId(RecipeIngredient recipeIngredient) {
+	/*public static RecipeIngredient findId(RecipeIngredient recipeIngredient) {
 		RecipeIngredientDAO dao = new RecipeIngredientDAO();
 		return dao.findId(recipeIngredient);
 	}
 	public static List<Integer> findIds(int id) {
 		RecipeIngredientDAO dao = new RecipeIngredientDAO();
 		return dao.findIds(id);
-	}
+	}*/
 	//GETTERS AND SETTERS
-	public int getIdIngredient() {
-		return idIngredient;
-	}
-	public void setIdIngredient(int idIngredient) {
-		this.idIngredient = idIngredient;
-	}
-	public int getIdRecipe() {
-		return idRecipe;
-	}
-	public void setIdRecipe(int idRecipe) {
-		this.idRecipe = idRecipe;
-	}
 	public double getQuantity() {
 		return quantity;
 	}
@@ -90,12 +65,12 @@ public class RecipeIngredient implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "RecipeIngredient_Server [idIngredient=" + idIngredient + ", idRecipe=" + idRecipe + ", quantity="
-				+ quantity + ", ingredient=" + ingredient + ", recipe=" + recipe + "]";
+		return "RecipeIngredient_Server [quantity="+ quantity + ", ingredient=" + ingredient + ","
+				+ " recipe=" + recipe + "]";
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(idIngredient, idRecipe, ingredient, quantity, recipe);
+		return Objects.hash(ingredient, quantity, recipe);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -106,8 +81,7 @@ public class RecipeIngredient implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		RecipeIngredient other = (RecipeIngredient) obj;
-		return idIngredient == other.idIngredient && idRecipe == other.idRecipe
-				&& Objects.equals(ingredient, other.ingredient)
+		return  Objects.equals(ingredient, other.ingredient)
 				&& Double.doubleToLongBits(quantity) == Double.doubleToLongBits(other.quantity)
 				&& Objects.equals(recipe, other.recipe);
 	}

@@ -23,22 +23,29 @@ public class RecipeDAO extends DAO<Recipe> {
     }
     @Override
     public boolean create(Recipe obj) {
-        MultivaluedMap<String, String> paramsPost = new MultivaluedMapImpl();
-        paramsPost.add("name", obj.getName());
-        paramsPost.add("gender", obj.getRecipeGender().toString());
-        paramsPost.add("idPerson", Integer.toString(obj.getPerson().getIdPerson()));
-
         try {
-            ClientResponse res = this.resource
-                    .path("recipe/create")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, paramsPost);
+            JSONObject json = new JSONObject();
+            json.put("name", obj.getName());
+            json.put("gender", obj.getRecipeGender().toString());
+            json.put("idPerson", obj.getPerson().getIdPerson());
 
-            return res.getStatus() == 201;
+            ClientResponse res = this.resource
+                    .path("recipe")
+                    .type(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .post(ClientResponse.class, json.toString());
+
+            if (res.getStatus() == 201) {
+                String response = res.getEntity(String.class);
+                JSONObject jsonResponse = new JSONObject(response);
+                obj.setIdRecipe(jsonResponse.getInt("idRecipe"));
+                return true;
+            }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return false;
         }
+        return false;
     }
 
     @Override
@@ -47,10 +54,10 @@ public class RecipeDAO extends DAO<Recipe> {
     	paramsDelete.add("id", String.valueOf(obj.getIdRecipe()));
         try {
             ClientResponse res = this.resource
-                    .path("recipe/delete")
+                    .path("recipe/"+obj.getIdRecipe())
                     .accept(MediaType.APPLICATION_JSON)
                     .delete(ClientResponse.class,paramsDelete);
-            return res.getStatus() == 204;
+            return res.getStatus() == 200;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return false;
@@ -58,17 +65,18 @@ public class RecipeDAO extends DAO<Recipe> {
     }
     @Override
     public boolean update(Recipe obj) {
-        MultivaluedMap<String, String> paramsPut = new MultivaluedMapImpl();
-        paramsPut.add("id", String.valueOf(obj.getIdRecipe()));
-        paramsPut.add("name", obj.getName());
-        paramsPut.add("gender", obj.getRecipeGender().toString());
-        paramsPut.add("idPerson", Integer.toString(obj.getPerson().getIdPerson()));
+        JSONObject json = new JSONObject();
+        json.put("idRecipe", obj.getIdRecipe());
+        json.put("name", obj.getName());
+        json.put("recipeGender", obj.getRecipeGender().toString());
+        json.put("idPerson", obj.getPerson().getIdPerson());
 
         try {
             ClientResponse res = this.resource
-                    .path("recipe/update")
+                    .path("recipe")
+                    .type(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .put(ClientResponse.class, paramsPut);
+                    .put(ClientResponse.class, json.toString());
 
             return res.getStatus() == 200;
         } catch (Exception ex) {
@@ -103,7 +111,7 @@ public class RecipeDAO extends DAO<Recipe> {
     public Recipe find(int id) {
         try {
             ClientResponse res = this.resource
-                    .path("recipe2/get/" + id)
+                    .path("recipe/" + id)
                     .accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
 

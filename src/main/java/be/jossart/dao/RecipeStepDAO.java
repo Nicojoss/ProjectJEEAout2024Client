@@ -1,19 +1,15 @@
 package be.jossart.dao;
 
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
-
 import be.jossart.javabeans.Recipe;
 import be.jossart.javabeans.RecipeStep;
 
@@ -24,15 +20,16 @@ public class RecipeStepDAO extends DAO<RecipeStep> {
 
     @Override
     public boolean create(RecipeStep obj) {
-        MultivaluedMap<String, String> paramsPost = new MultivaluedMapImpl();
-        paramsPost.add("instruction", obj.getInstruction());
-        paramsPost.add("recipeId", Integer.toString(obj.getRecipe().getIdRecipe()));
+    	JSONObject json = new JSONObject();
+        json.put("instruction", obj.getInstruction());
+        json.put("recipeId", obj.getRecipe().getIdRecipe());
 
         try {
             ClientResponse res = this.resource
-                    .path("recipeStep/create")
+                    .path("recipeStep")
+                    .type(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, paramsPost);
+                    .post(ClientResponse.class, json.toString());
 
             return res.getStatus() == 201;
         } catch (Exception ex) {
@@ -43,16 +40,13 @@ public class RecipeStepDAO extends DAO<RecipeStep> {
 
     @Override
     public boolean delete(RecipeStep obj) {
-    	MultivaluedMap<String, String> paramsDelete = new MultivaluedMapImpl();
-    	paramsDelete.add("id", String.valueOf(obj.getIdRecipeStep()));
-
         try {
             ClientResponse res = this.resource
-                    .path("recipeStep/delete")
+                    .path("recipeStep/"+obj.getIdRecipeStep())
                     .accept(MediaType.APPLICATION_JSON)
-                    .delete(ClientResponse.class,paramsDelete);
+                    .delete(ClientResponse.class);
 
-            return res.getStatus() == 204;
+            return res.getStatus() == 200;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return false;
@@ -61,16 +55,17 @@ public class RecipeStepDAO extends DAO<RecipeStep> {
 
     @Override
     public boolean update(RecipeStep obj) {
-        MultivaluedMap<String, String> paramsPut = new MultivaluedMapImpl();
-        paramsPut.add("id", String.valueOf(obj.getIdRecipeStep()));
-        paramsPut.add("instruction", obj.getInstruction());
-        paramsPut.add("recipeId", Integer.toString(obj.getRecipe().getIdRecipe()));
+        JSONObject json = new JSONObject();
+        json.put("idRecipeStep", obj.getIdRecipeStep());
+        json.put("instruction", obj.getInstruction());
+        json.put("recipeId", obj.getRecipe().getIdRecipe());
 
         try {
             ClientResponse res = this.resource
-                    .path("recipeStep/update")
+                    .path("recipeStep")
+                    .type(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .put(ClientResponse.class, paramsPut);
+                    .put(ClientResponse.class, json.toString());
 
             return res.getStatus() == 200;
         } catch (Exception ex) {
@@ -83,7 +78,7 @@ public class RecipeStepDAO extends DAO<RecipeStep> {
     public RecipeStep find(int id) {
         try {
             ClientResponse res = this.resource
-                    .path("recipeStep2/get/" + id)
+                    .path("recipeStep/" + id)
                     .accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
 

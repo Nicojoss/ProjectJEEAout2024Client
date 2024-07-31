@@ -37,6 +37,15 @@ public class Recipe implements Serializable{
 		this.recipeIngredientList = recipeIngredientList;
 		this.recipeStepList = recipeStepList;
 	}
+	public Recipe(String name, RecipeGender recipeGender, Person person) {
+		super();
+		this.idRecipe = 0;
+		this.name = name;
+		this.person = person;
+		this.recipeGender = recipeGender;
+		recipeIngredientList = new ArrayList<>();
+		recipeStepList = new ArrayList<>();
+	}
 	//METHODS
 	public boolean create() {
 		return recipeDAO.create(this);

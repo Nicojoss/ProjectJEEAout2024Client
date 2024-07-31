@@ -39,17 +39,17 @@ public class RemoveRecipeServlet extends HttpServlet {
         }
 
         List<Integer> recipeStepListIds = RecipeStep.findIds(idRecipe);
-        List<Integer> recipeIngredientListIds = RecipeIngredient.findIds(idRecipe);
+        //List<Integer> recipeIngredientListIds = RecipeIngredient.findIds(idRecipe);
 
         for (int recipeStepId : recipeStepListIds) {
         	RecipeStep recipeStep = new RecipeStep(recipeStepId,null,null);
             recipeStep.delete();
         }
 
-        for (int recipeIngredientId : recipeIngredientListIds) {
-        	RecipeIngredient recipeIngredient = new RecipeIngredient(idRecipe,recipeIngredientId,null,null);
-            recipeIngredient.delete();
-        }
+        //for (int recipeIngredientId : recipeIngredientListIds) {
+        	//RecipeIngredient recipeIngredient = new RecipeIngredient(null,idRecipe,recipeIngredientId,null,null);
+            //recipeIngredient.delete();
+        //}
         
         Recipe recipe = new Recipe(idRecipe,null,null,null,null,null);
         boolean isRecipeDeleted = recipe.delete();

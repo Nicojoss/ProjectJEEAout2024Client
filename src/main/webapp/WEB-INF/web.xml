@@ -18,7 +18,11 @@
   <filter-mapping>
   	<filter-name>LoginFilter</filter-name>
   	<servlet-name>ManageAccountServlet</servlet-name>
-  </filter-mapping>	
+  </filter-mapping>
+  <filter-mapping>
+  	<filter-name>LoginFilter</filter-name>
+  	<servlet-name>CreateIngredientRecipeStepNumberServlet</servlet-name>
+  </filter-mapping>		
   <filter-mapping>
   	<filter-name>LoginFilter</filter-name>
   	<servlet-name>CreateRecipeServlet</servlet-name>
@@ -41,7 +45,7 @@
   	<servlet-name>HomeServlet</servlet-name>
   	<servlet-class>be.jossart.servlets.HomeServlet</servlet-class>
   </servlet>
-<servlet>
+  <servlet>
   	<servlet-name>SignInServlet</servlet-name>
   	<servlet-class>be.jossart.servlets.SignInServlet</servlet-class>
   </servlet>
@@ -64,6 +68,10 @@
   <servlet>
   	<servlet-name>LogoutServlet</servlet-name>
   	<servlet-class>be.jossart.servlets.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>CreateIngredientRecipeStepNumberServlet</servlet-name>
+  	<servlet-class>be.jossart.servlets.CreateIngredientRecipeStepNumberServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>CreateRecipeServlet</servlet-name>
@@ -113,6 +121,10 @@
   	<url-pattern>/logout</url-pattern>
   	<url-pattern>/Logout</url-pattern>
   	<url-pattern>/LogOut</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>CreateIngredientRecipeStepNumberServlet</servlet-name>
+  	<url-pattern>/CreateIngredientRecipeStepNumberServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>CreateRecipeServlet</servlet-name>

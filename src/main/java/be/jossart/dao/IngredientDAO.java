@@ -21,24 +21,29 @@ public class IngredientDAO extends DAO<Ingredient>{
 	}
 	@Override
 	public boolean create(Ingredient obj) {
-		MultivaluedMap<String, String> paramsPost = new MultivaluedMapImpl();
-		paramsPost.add("name", obj.getName());
-		paramsPost.add("type",  obj.getType().toString());
+	    JSONObject json = new JSONObject();
+	    json.put("name", obj.getName());
+	    json.put("type", obj.getType().toString());
 
-		try {
-			 ClientResponse res = this.resource
-	 	                .path("ingredient/create")
-	 	                .accept(MediaType.APPLICATION_JSON)
-	 	                .post(ClientResponse.class, paramsPost);
-			
-			if (res.getStatus() == 201) {
-				return true;
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-			return false;
-		}
-		return false;
+	    try {
+	        ClientResponse res = this.resource
+	                .path("ingredient")
+	                .type(MediaType.APPLICATION_JSON)
+	                .accept(MediaType.APPLICATION_JSON)
+	                .post(ClientResponse.class, json.toString());
+
+	        if (res.getStatus() == 201) {
+	            String response = res.getEntity(String.class);
+	            JSONObject jsonResponse = new JSONObject(response);
+
+	            obj.setIdIngredient(jsonResponse.getInt("idIngredient"));
+	            return true;
+	        }
+	    } catch (Exception ex) {
+	        System.out.println(ex.getMessage());
+	        return false;
+	    }
+	    return false;
 	}
 
 	@Override
@@ -48,28 +53,9 @@ public class IngredientDAO extends DAO<Ingredient>{
 		
         try {
             ClientResponse res = this.resource
-                    .path("ingredient/delete")
+                    .path("ingredient/"+obj.getIdIngredient())
                     .accept(MediaType.APPLICATION_JSON)
                     .delete(ClientResponse.class,paramsDelete);
-
-            return res.getStatus() == 204;
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            return false;
-        }
-    }
-
-	@Override
-    public boolean update(Ingredient obj) {
-        MultivaluedMap<String, String> paramsPut = new MultivaluedMapImpl();
-        paramsPut.add("id", String.valueOf(obj.getIdIngredient()));
-        paramsPut.add("name", obj.getName());
-        paramsPut.add("type", obj.getType().toString());
-        try {
-            ClientResponse res = this.resource
-                    .path("ingredient/update")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .put(ClientResponse.class, paramsPut);
 
             return res.getStatus() == 200;
         } catch (Exception ex) {
@@ -79,10 +65,31 @@ public class IngredientDAO extends DAO<Ingredient>{
     }
 
 	@Override
+	public boolean update(Ingredient obj) {
+	    JSONObject json = new JSONObject();
+	    json.put("idIngredient", obj.getIdIngredient());
+	    json.put("name", obj.getName());
+	    json.put("type", obj.getType().toString());
+
+	    try {
+	        ClientResponse res = this.resource
+	                .path("ingredient")
+	                .type(MediaType.APPLICATION_JSON)
+	                .accept(MediaType.APPLICATION_JSON)
+	                .put(ClientResponse.class, json.toString());
+
+	        return res.getStatus() == 200;
+	    } catch (Exception ex) {
+	        System.out.println(ex.getMessage());
+	        return false;
+	    }
+	}
+
+	@Override
 	public Ingredient find(int id) {
 	    try {
 	        ClientResponse res = this.resource
-	                .path("ingredient2/get/" + id)
+	                .path("ingredient/" + id)
 	                .accept(MediaType.APPLICATION_JSON)
 	                .get(ClientResponse.class);
 
