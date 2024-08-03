@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import be.jossart.dao.DAO;
@@ -17,17 +18,17 @@ public class Recipe implements Serializable{
 	private String name;
 	private Person person;
 	private RecipeGender recipeGender;
-	private ArrayList<RecipeIngredient> recipeIngredientList;
+	private HashMap<Integer, Ingredient> recipeIngredientList;
 	private ArrayList<RecipeStep> recipeStepList;
 	private static final DAO<Recipe> recipeDAO = new RecipeDAO();
 	
 	//CTOR
 	public Recipe() {
-		recipeIngredientList = new ArrayList<>();
+		recipeIngredientList = new HashMap<Integer, Ingredient>();
 		recipeStepList = new ArrayList<>();
 	}
 	public Recipe(int idRecipe, String name, Person person, RecipeGender recipeGender,
-			ArrayList<RecipeIngredient> recipeIngredientList
+			HashMap<Integer, Ingredient> recipeIngredientList
 			, ArrayList<RecipeStep> recipeStepList) {
 		super();
 		this.idRecipe = idRecipe;
@@ -83,11 +84,11 @@ public class Recipe implements Serializable{
 	public void setRecipeGender(RecipeGender recipeGender) {
 		this.recipeGender = recipeGender;
 	}
-	public ArrayList<RecipeIngredient> getRecipeIngredientList() {
+	public HashMap<Integer, Ingredient> getRecipeIngredientList() {
 		return recipeIngredientList;
 	}
-	public void setRecipeIngredientList(ArrayList<RecipeIngredient> recipeIngredientList) {
-		this.recipeIngredientList = getRecipeIngredientList();
+	public void setRecipeIngredientList(HashMap<Integer, Ingredient> recipeIngredientList) {
+		this.recipeIngredientList = recipeIngredientList;
 	}
 	public ArrayList<RecipeStep> getRecipeStepList() {
 		return recipeStepList;
