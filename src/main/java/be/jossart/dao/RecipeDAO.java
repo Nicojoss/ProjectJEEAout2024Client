@@ -77,8 +77,9 @@ public class RecipeDAO extends DAO<Recipe> {
         }
     }
 	public List<Recipe> findRecipe(String recherche){
-		String responseJSON = this.resource.path("recipe3").path(String.valueOf(recherche)).accept(MediaType.APPLICATION_JSON).get(String.class);
+		String responseJSON = this.resource.path("recipe").path(String.valueOf(recherche)).accept(MediaType.APPLICATION_JSON).get(String.class);
 		List<Recipe> recipes = new ArrayList<Recipe>();
+		System.out.println("json : " + responseJSON);
 		JSONArray array = new JSONArray(responseJSON);
 		ObjectMapper mapper = new ObjectMapper();
 		for(int i =0;i<array.length();i++) {

@@ -34,6 +34,10 @@ public class SearchRecipeServlet extends HttpServlet {
 		}else {
 			System.out.println("recherche : " +recherche);
 			List<Recipe> recipes = Recipe.findRecipe(recherche);
+			for (Recipe recipe : recipes) {
+				System.out.println("taille ingrédients: " + recipe.getRecipeIngredientList().size());
+				System.out.println("taille étapes: " + recipe.getRecipeStepList().size());
+			}
 			request.setAttribute("Recettes", recipes);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/PrintRecipes.jsp");
 			dispatcher.forward(request, response);

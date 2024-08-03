@@ -59,7 +59,7 @@ public class ChangeRecipeServlet extends HttpServlet {
             recipeSteps.add(recipeStep);
         }
 
-        recipe.setRecipeIngredientList(recipeIngredients);
+        //recipe.setRecipeIngredientList(recipeIngredients);
         recipe.setRecipeStepList(recipeSteps);
         request.setAttribute("recipe", recipe);
 
