@@ -3,6 +3,7 @@ package be.jossart.servlets;
 import java.io.IOException;
 
 
+
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import be.jossart.javabeans.Person;
 import be.jossart.javabeans.Recipe;
-import be.jossart.javabeans.RecipeIngredient;
 import be.jossart.javabeans.RecipeStep;
 
 public class RemoveRecipeServlet extends HttpServlet {

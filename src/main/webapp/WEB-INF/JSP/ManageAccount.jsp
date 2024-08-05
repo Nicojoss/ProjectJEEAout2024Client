@@ -7,8 +7,11 @@
 <title>Manage account page</title>
 </head>
 <body>
-	<a href="/ProjectJEE2023Client/HomeServlet">Home Page</a>
-	<%@ include file="LogoutPartialView.jsp" %>
+	<h1>Manage your account</h1>
+	<div class="d-flex justify-content-start mb-3">
+        <a class="btn btn-primary" href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
+        <jsp:include page="LogoutPartialView.jsp" />
+    </div>
         <form action="ManageAccountServlet" method="POST">
 		<table border="1" cellspacing="0" cellpadding="5">
 			<tr>
@@ -20,7 +23,7 @@
 				<td><input type="password" name="password" id="password" value="" size="20" /></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="submit" /></td>
+				<td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="submit" class="btn btn-primary" /></td>
 			</tr>
 		</table>
 	</form>

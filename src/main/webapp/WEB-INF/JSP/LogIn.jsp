@@ -5,33 +5,34 @@
 <head>
 <meta charset="UTF-8">
 <title>Welcome to the login page!</title>
+<jsp:include page="/WEB-INF/JSP/Bootstrap.jsp"/>
 </head>
 <body>
-	<a href="/ProjectJEEAout2024Client/home">Home Page</a>
-	<%if (request.getAttribute("success") != null) {%>
-       <div class="alert alert-success">
-       <p><%= request.getAttribute("success")%></p> 
-       </div>
-    <% } %>
-    <% if (request.getAttribute("fail") != null) {%>
-        <div class="alert alert-danger">
-      	<p><%= request.getAttribute("fail")%></p> 
-       	</div>
-    <% } %>
-	<form action="LogInServlet" method="POST">
-		<table border="1" cellspacing="0" cellpadding="5">
-			<tr>
-				<td>Username :</td>
-				<td><input type="text" name="username" id="username" value="" size="20" /></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type="password" name="password" id="password" value="" size="20" /></td>
-			</tr>
-			<tr>
-				<td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="submit" /></td>
-			</tr>
-		</table>
-	</form>
+    <div class="container">
+        <a class="btn btn-link mt-3" href="/ProjectJEEAout2024Client/home">Home Page</a>
+        <% if (request.getAttribute("success") != null) { %>
+            <div class="alert alert-success mt-3">
+                <p><%= request.getAttribute("success") %></p>
+            </div>
+        <% } %>
+        <% if (request.getAttribute("fail") != null) { %>
+            <div class="alert alert-danger mt-3">
+                <p><%= request.getAttribute("fail") %></p>
+            </div>
+        <% } %>
+        <form action="LogInServlet" method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="username">Username :</label>
+                <input type="text" class="form-control" name="username" id="username" value="" size="20" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" id="password" value="" size="20" />
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" class="btn btn-primary" name="submit" id="submit" value="Submit" />
+            </div>
+        </form>
+    </div>
 </body>
 </html>

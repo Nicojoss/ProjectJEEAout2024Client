@@ -4,8 +4,12 @@ import java.io.Serializable;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import be.jossart.dao.DAO;
 import be.jossart.dao.RecipeDAO;
 
@@ -17,17 +21,17 @@ public class Recipe implements Serializable{
 	private String name;
 	private Person person;
 	private RecipeGender recipeGender;
-	private ArrayList<RecipeIngredient> recipeIngredientList;
+	private HashMap<Double, Ingredient> recipeIngredientList;
 	private ArrayList<RecipeStep> recipeStepList;
 	private static final DAO<Recipe> recipeDAO = new RecipeDAO();
 	
 	//CTOR
 	public Recipe() {
-		recipeIngredientList = new ArrayList<>();
+		recipeIngredientList = new HashMap<Double, Ingredient>();
 		recipeStepList = new ArrayList<>();
 	}
 	public Recipe(int idRecipe, String name, Person person, RecipeGender recipeGender,
-			ArrayList<RecipeIngredient> recipeIngredientList
+			HashMap<Double, Ingredient> recipeIngredientList
 			, ArrayList<RecipeStep> recipeStepList) {
 		super();
 		this.idRecipe = idRecipe;
@@ -43,7 +47,7 @@ public class Recipe implements Serializable{
 		this.name = name;
 		this.person = person;
 		this.recipeGender = recipeGender;
-		recipeIngredientList = new ArrayList<>();
+		recipeIngredientList = new HashMap<Double,Ingredient>();
 		recipeStepList = new ArrayList<>();
 	}
 	//METHODS
@@ -66,6 +70,36 @@ public class Recipe implements Serializable{
 	public static List<Integer> findIds(int id) {
 		RecipeDAO dao = new RecipeDAO();
 		return dao.findIds(id);
+	}
+	public static boolean createRecipeIngredient(int recipeId, int ingredientId, double quantity) {
+		RecipeDAO dao = new RecipeDAO();
+		return dao.createRecipeIngredient(recipeId, ingredientId, quantity);
+	}
+	public static boolean deleteRecipeIngredient(int recipeId, int ingredientId) {
+		RecipeDAO dao = new RecipeDAO();
+		return dao.deleteRecipeIngredient(recipeId, ingredientId);
+	}
+	public static boolean updateRecipeIngredient(int recipeId, int ingredientId, double quantity) {
+		RecipeDAO dao = new RecipeDAO();
+		return dao.updateRecipeIngredient(recipeId, ingredientId, quantity);
+	}
+	public static Recipe findRecipeIngredient(int recipeId, int ingredientId) {
+		RecipeDAO dao = new RecipeDAO();
+		return dao.findRecipeIngredient(recipeId, ingredientId);
+	}
+	@JsonIgnore
+	public Ingredient getFirstIngredientFromRecipeIngredientList() {
+		for(Ingredient i : this.getRecipeIngredientList().values()){
+			return i;
+		}
+		return null;
+	}
+	@JsonIgnore
+	public double getFirstQuantityFromRecipeIngredientList() {
+		for(double i : this.getRecipeIngredientList().keySet()){
+			return i;
+		}
+		return 0;
 	}
 	//GETTERS SETTERS
 	public int getIdRecipe() {
@@ -92,11 +126,13 @@ public class Recipe implements Serializable{
 	public void setRecipeGender(RecipeGender recipeGender) {
 		this.recipeGender = recipeGender;
 	}
-	public ArrayList<RecipeIngredient> getRecipeIngredientList() {
+	@JsonIgnore
+	public HashMap<Double, Ingredient> getRecipeIngredientList() {
 		return recipeIngredientList;
 	}
-	public void setRecipeIngredientList(ArrayList<RecipeIngredient> recipeIngredientList) {
-		this.recipeIngredientList = getRecipeIngredientList();
+	@JsonIgnore
+	public void setRecipeIngredientList(HashMap<Double, Ingredient> recipeIngredientList) {
+		this.recipeIngredientList = recipeIngredientList;
 	}
 	public ArrayList<RecipeStep> getRecipeStepList() {
 		return recipeStepList;

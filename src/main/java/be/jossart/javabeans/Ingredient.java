@@ -14,17 +14,17 @@ public class Ingredient implements Serializable{
 	private int idIngredient;
 	private String name;
 	private IngredientType type;
-	private ArrayList<RecipeIngredient> recipeIngredientList;
+	private ArrayList<Recipe> recipeList;
 	private static final DAO<Ingredient> ingredientDAO = new IngredientDAO();
 	//CTOR
 	public Ingredient() {
 	}
 	public Ingredient(int idIngredient, String name, IngredientType type,
-			ArrayList<RecipeIngredient> recipeIngredientList) {
+			ArrayList<Recipe> recipeList) {
 		this.idIngredient = idIngredient;
 		this.name = name;
 		this.type = type;
-		this.recipeIngredientList = recipeIngredientList;
+		this.recipeList = recipeList;
 	}
 	//METHODS
 	public boolean create() {
@@ -62,21 +62,21 @@ public class Ingredient implements Serializable{
 	public void setType(IngredientType type) {
 		this.type = type;
 	}
-	public ArrayList<RecipeIngredient> getRecipeIngredientList() {
-		return recipeIngredientList;
+	public ArrayList<Recipe> getRecipeList() {
+		return recipeList;
 	}
-	public void setRecipeIngredientList(ArrayList<RecipeIngredient> recipeIngredientList) {
-		this.recipeIngredientList = recipeIngredientList;
+	public void setRecipeList(ArrayList<Recipe> recipeList) {
+		this.recipeList = recipeList;
 	}
 	@Override
 	public String toString() {
 		return "Ingredient [idIngredient=" + idIngredient + ","
-				+ " name=" + name + ", type=" + type + ", recipeIngredientList=" + recipeIngredientList
+				+ " name=" + name + ", type=" + type + ", recipeList=" + recipeList
 				+ "]";
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(idIngredient, name, recipeIngredientList, type);
+		return Objects.hash(idIngredient, name, recipeList, type);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -88,6 +88,6 @@ public class Ingredient implements Serializable{
 			return false;
 		Ingredient other = (Ingredient) obj;
 		return idIngredient == other.idIngredient && Objects.equals(name, other.name)
-				&& Objects.equals(recipeIngredientList, other.recipeIngredientList) && type == other.type;
+				&& Objects.equals(recipeList, other.recipeList) && type == other.type;
 	}
 }

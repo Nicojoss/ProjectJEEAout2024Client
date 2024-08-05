@@ -3,6 +3,7 @@ package be.jossart.dao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
@@ -14,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+
+import be.jossart.javabeans.Ingredient;
 import be.jossart.javabeans.Person;
 import be.jossart.javabeans.Recipe;
 import be.jossart.javabeans.RecipeGender;
@@ -85,8 +88,9 @@ public class RecipeDAO extends DAO<Recipe> {
         }
     }
 	public List<Recipe> findRecipe(String recherche){
-		String responseJSON = this.resource.path("recipe3").path(String.valueOf(recherche)).accept(MediaType.APPLICATION_JSON).get(String.class);
+		String responseJSON = this.resource.path("recipe").path(String.valueOf(recherche)).accept(MediaType.APPLICATION_JSON).get(String.class);
 		List<Recipe> recipes = new ArrayList<Recipe>();
+		System.out.println("json : " + responseJSON);
 		JSONArray array = new JSONArray(responseJSON);
 		ObjectMapper mapper = new ObjectMapper();
 		for(int i =0;i<array.length();i++) {
@@ -204,6 +208,96 @@ public class RecipeDAO extends DAO<Recipe> {
         } catch (JSONException ex) {
             System.out.println(ex.getMessage());
             return Collections.emptyList();
+        }
+    }
+
+    public boolean createRecipeIngredient(int recipeId, int ingredientId, double quantity) {
+    	JSONObject json = new JSONObject();
+        json.put("recipeId", recipeId);
+        json.put("ingredientId", ingredientId);
+        json.put("quantity", quantity);
+
+        try {
+            ClientResponse res = this.resource
+                    .path("recipeIngredient")
+                    .type(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .post(ClientResponse.class, json.toString());
+
+            return res.getStatus() == 201;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteRecipeIngredient(int recipeId, int ingredientId) {
+        try {
+            ClientResponse res = this.resource
+                    .path("recipeIngredient/"+recipeId+"/"+
+                    		ingredientId)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .delete(ClientResponse.class);
+
+            return res.getStatus() == 200;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updateRecipeIngredient(int recipeId, int ingredientId, double quantity) {
+        JSONObject json = new JSONObject();
+        json.put("recipeId", recipeId);
+        json.put("ingredientId", ingredientId);
+        json.put("quantity", quantity);
+
+        try {
+            ClientResponse res = this.resource
+                    .path("recipeIngredient")
+                    .type(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .put(ClientResponse.class, json.toString());
+
+            return res.getStatus() == 200;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    public Recipe findRecipeIngredient(int idRecipe, int idIngredient) {
+        try {
+        	HashMap<Double,Ingredient> recipeIngredientList 
+        							   = new HashMap<Double,Ingredient>();
+            ClientResponse res = this.resource
+                    .path("recipeIngredient/" + idRecipe + "/" + idIngredient)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .get(ClientResponse.class);
+
+            if (res.getStatus() == 200) {
+                String response = res.getEntity(String.class);
+                JSONObject json = new JSONObject(response);
+
+                int recipeId = json.getInt("idRecipe");
+                int ingredientId = json.getInt("idIngredient");
+                double quantity = json.getDouble("quantity");
+                
+                recipeIngredientList.put(quantity, 
+                		new Ingredient(ingredientId,null,null,null));
+                Recipe recipe = new Recipe(recipeId,null,null,null,
+                		recipeIngredientList,null);
+
+                return recipe;
+            } else if (res.getStatus() == 404) {
+                return null;
+            } else {
+                System.out.println("Failed to retrieve recipe ingredient. Status: " + res.getStatus());
+                return null;
+            }
+        } catch (JSONException ex) {
+            System.out.println(ex.getMessage());
+            return null;
         }
     }
 }

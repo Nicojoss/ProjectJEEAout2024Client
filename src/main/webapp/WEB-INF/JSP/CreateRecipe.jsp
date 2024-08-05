@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Recipe</title>
-    <title>Recipe creation</title>
 </head>
 <body>
 	<%@ include file="LogoutPartialView.jsp" %>
@@ -19,6 +18,7 @@
       	<p><%= request.getAttribute("fail")%></p> 
        	</div>
     <% } %>
+	<h1>Create recipe</h1>
     <form action="CreateRecipeServlet" method="POST">
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>

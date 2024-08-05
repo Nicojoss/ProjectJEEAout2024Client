@@ -12,7 +12,6 @@ import be.jossart.javabeans.IngredientType;
 import be.jossart.javabeans.Person;
 import be.jossart.javabeans.Recipe;
 import be.jossart.javabeans.RecipeGender;
-import be.jossart.javabeans.RecipeIngredient;
 import be.jossart.javabeans.RecipeStep;
 
 public class CreateRecipeServlet extends HttpServlet {
@@ -49,7 +48,6 @@ public class CreateRecipeServlet extends HttpServlet {
 	        					       person);
 	        //Ingredient
 	        Ingredient ingredient = new Ingredient();
-	        RecipeIngredient recipeIngredient = new RecipeIngredient();
 	        
 	        //RecipeStep
 	        RecipeStep recipeStep = new RecipeStep();
@@ -70,11 +68,9 @@ public class CreateRecipeServlet extends HttpServlet {
 	            for(int i = 0; i < Integer.parseInt((String) session.getAttribute("ingredientNumber")); i++) {
 		        	ingredient.setName(request.getParameter("ingredientName"+i));
 		        	ingredient.setType(IngredientType.valueOf(request.getParameter("ingredientType"+i)));
-			        recipeIngredient.setQuantity(Double.parseDouble(request.getParameter("ingredientQuantity"+i)));
-			        recipeIngredient.setRecipe(recipe);
+			        double quantity = Double.parseDouble(request.getParameter("ingredientQuantity"+i));
 			        if (ingredient.create()) {
-		                recipeIngredient.setIngredient(ingredient);
-		                if(!recipeIngredient.create()) {
+		                if(!Recipe.createRecipeIngredient(recipe.getIdRecipe(),ingredient.getIdIngredient(),quantity)) {
 			        		request.setAttribute("fail", "Failed to create the recipe. Please try again.");
 			            	getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
 			                return;
@@ -85,7 +81,6 @@ public class CreateRecipeServlet extends HttpServlet {
 		                return;
 		            }
 			        ingredient = new Ingredient();
-			        recipeIngredient = new RecipeIngredient();
 		        }
 		        request.setAttribute("success", "Success to create the recipe.");
 	        	getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);

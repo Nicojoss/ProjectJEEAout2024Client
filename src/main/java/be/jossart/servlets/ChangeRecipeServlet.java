@@ -1,6 +1,7 @@
 package be.jossart.servlets;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -13,7 +14,6 @@ import be.jossart.javabeans.IngredientType;
 import be.jossart.javabeans.Person;
 import be.jossart.javabeans.Recipe;
 import be.jossart.javabeans.RecipeGender;
-import be.jossart.javabeans.RecipeIngredient;
 import be.jossart.javabeans.RecipeStep;
 
 public class ChangeRecipeServlet extends HttpServlet {
@@ -42,7 +42,6 @@ public class ChangeRecipeServlet extends HttpServlet {
         //List<Integer> idsRecipeIngredients = RecipeIngredient.findIds(idRecipe);
         List<Integer> idsRecipeSteps = RecipeStep.findIds(idRecipe);
 
-        ArrayList<RecipeIngredient> recipeIngredients = new ArrayList<>();
         ArrayList<RecipeStep> recipeSteps = new ArrayList<>();
 
         //for (int idRecipeIngredient : idsRecipeIngredients) {
@@ -59,7 +58,7 @@ public class ChangeRecipeServlet extends HttpServlet {
             recipeSteps.add(recipeStep);
         }
 
-        recipe.setRecipeIngredientList(recipeIngredients);
+        //recipe.setRecipeIngredientList(recipeIngredients);
         recipe.setRecipeStepList(recipeSteps);
         request.setAttribute("recipe", recipe);
 
