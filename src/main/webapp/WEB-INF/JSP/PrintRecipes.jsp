@@ -25,10 +25,10 @@
                 <p>Nom : <%= r.getName() %></p>
                 <p>Genre : <%= r.getRecipeGender() %></p>
 <%
-                Map<Integer, Ingredient> ingredientMap = r.getRecipeIngredientList();
+                Map<Double, Ingredient> ingredientMap = r.getRecipeIngredientList();
                 if (ingredientMap != null && !ingredientMap.isEmpty()) {
-                    for (Map.Entry<Integer, Ingredient> entry : ingredientMap.entrySet()) {
-                        Integer key = entry.getKey();
+                    for (Map.Entry<Double, Ingredient> entry : ingredientMap.entrySet()) {
+                        Double key = entry.getKey();
                         Ingredient value = entry.getValue();
 %>
                         <div>
