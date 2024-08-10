@@ -27,17 +27,9 @@ public class ConsultOwnRecipeServlet extends HttpServlet {
         Person person = (Person) session.getAttribute("person");
         int idPerson = person.getIdPerson();
 
-        RecipeDAO recipeDAO = new RecipeDAO();
-        List<Integer> recipeIds = recipeDAO.findIds(idPerson);
+        List<Recipe> recipes = Recipe.findUserRecipe(idPerson);
 
-        ArrayList<Recipe> recipes = new ArrayList<>();
-
-        for (int idRecipe : recipeIds) {
-            Recipe recipe = recipeDAO.find(idRecipe);
-            if (recipe != null) {
-                recipes.add(recipe);
-            }
-        }
+        
         request.setAttribute("recipes", recipes);
         getServletContext().getRequestDispatcher("/WEB-INF/JSP/ConsultOwnRecipe.jsp").forward(request, response);
     }

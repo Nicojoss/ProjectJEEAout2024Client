@@ -110,6 +110,29 @@ public class RecipeDAO extends DAO<Recipe> {
 		}
 		return recipes;
 	}
+	public List<Recipe> findUserRecipe(int personId){
+		String responseJSON = this.resource.path("recipe/personRecipes/"+Integer.valueOf(personId)).accept(MediaType.APPLICATION_JSON).get(String.class);
+		List<Recipe> recipes = new ArrayList<Recipe>();
+		System.out.println("json : " + responseJSON);
+		JSONArray array = new JSONArray(responseJSON);
+		ObjectMapper mapper = new ObjectMapper();
+		for(int i =0;i<array.length();i++) {
+			String personJSON = array.get(i).toString();
+			try {
+				recipes.add(mapper.readValue(personJSON,Recipe.class));
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return recipes;
+	}
 
     @Override
     public Recipe find(int id) {

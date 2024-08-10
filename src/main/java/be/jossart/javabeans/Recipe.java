@@ -87,6 +87,10 @@ public class Recipe implements Serializable{
 		RecipeDAO dao = new RecipeDAO();
 		return dao.findRecipeIngredient(recipeId, ingredientId);
 	}
+	public static List<Recipe> findUserRecipe(int personId) {
+		RecipeDAO dao = new RecipeDAO();
+		return dao.findUserRecipe(personId);
+	}
 	@JsonIgnore
 	public Ingredient getFirstIngredientFromRecipeIngredientList() {
 		for(Ingredient i : this.getRecipeIngredientList().values()){
