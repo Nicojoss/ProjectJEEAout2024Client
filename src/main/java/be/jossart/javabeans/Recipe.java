@@ -126,11 +126,9 @@ public class Recipe implements Serializable{
 	public void setRecipeGender(RecipeGender recipeGender) {
 		this.recipeGender = recipeGender;
 	}
-	@JsonIgnore
 	public HashMap<Double, Ingredient> getRecipeIngredientList() {
 		return recipeIngredientList;
 	}
-	@JsonIgnore
 	public void setRecipeIngredientList(HashMap<Double, Ingredient> recipeIngredientList) {
 		this.recipeIngredientList = recipeIngredientList;
 	}

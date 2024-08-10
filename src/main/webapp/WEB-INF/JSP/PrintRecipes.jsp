@@ -32,7 +32,7 @@
                         Ingredient value = entry.getValue();
 %>
                         <div>
-                            <p>Ingredient Key: <%= key %></p>
+                            <p>Ingredient Quantity: <%= key %></p>
                             <p>Ingredient: <%= value.getName() %> (Type: <%= value.getType() %>)</p>
                         </div>
 <%

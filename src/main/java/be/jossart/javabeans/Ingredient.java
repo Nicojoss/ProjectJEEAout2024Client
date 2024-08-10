@@ -5,9 +5,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import be.jossart.dao.DAO;
 import be.jossart.dao.IngredientDAO;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Ingredient implements Serializable{
 	//ATTRIBUTES
 	private static final long serialVersionUID = 634419802561898936L;
