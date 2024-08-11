@@ -51,6 +51,22 @@ public class RecipeDAO extends DAO<Recipe> {
         return false;
     }
 
+    public boolean Delete(int recipe_id) {
+    	System.out.println("id recipe " + recipe_id);
+    	MultivaluedMap<String, String> paramsDelete = new MultivaluedMapImpl();
+    	paramsDelete.add("id", String.valueOf(recipe_id));
+        try {
+            ClientResponse res = this.resource
+                    .path("recipe/"+recipe_id)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .delete(ClientResponse.class,paramsDelete);
+            System.out.println("resultat api = " + res.getStatus()) ;
+            return res.getStatus() == 200;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
     @Override
     public boolean delete(Recipe obj) {
     	MultivaluedMap<String, String> paramsDelete = new MultivaluedMapImpl();
@@ -66,6 +82,7 @@ public class RecipeDAO extends DAO<Recipe> {
             return false;
         }
     }
+    
     @Override
     public boolean update(Recipe obj) {
         JSONObject json = new JSONObject();

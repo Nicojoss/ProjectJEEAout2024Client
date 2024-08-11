@@ -30,15 +30,15 @@ public class RemoveRecipeServlet extends HttpServlet {
         	return;
         }
         
-        List<Integer> idsRecipe = Recipe.findIds(person.getIdPerson());
+        /*List<Integer> idsRecipe = Recipe.findIds(person.getIdPerson());
         if(!idsRecipe.contains(idRecipe))
         {
         	request.setAttribute("fail", "Failed to delete the recipe.");
         	getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
         	return;
-        }
+        }*/
 
-        List<Integer> recipeStepListIds = RecipeStep.findIds(idRecipe);
+        /*List<Integer> recipeStepListIds = RecipeStep.findIds(idRecipe);
         //List<Integer> recipeIngredientListIds = RecipeIngredient.findIds(idRecipe);
 
         for (int recipeStepId : recipeStepListIds) {
@@ -50,8 +50,9 @@ public class RemoveRecipeServlet extends HttpServlet {
         	//RecipeIngredient recipeIngredient = new RecipeIngredient(null,idRecipe,recipeIngredientId,null,null);
             //recipeIngredient.delete();
         //}
-        
+        */
         Recipe recipe = new Recipe(idRecipe,null,null,null,null,null);
+
         boolean isRecipeDeleted = recipe.delete();
         if (isRecipeDeleted) {
         	request.setAttribute("success", "Success to delete the recipe!");
