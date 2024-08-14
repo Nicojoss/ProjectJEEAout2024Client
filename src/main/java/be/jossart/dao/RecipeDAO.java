@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -17,9 +19,11 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 import be.jossart.javabeans.Ingredient;
+import be.jossart.javabeans.IngredientType;
 import be.jossart.javabeans.Person;
 import be.jossart.javabeans.Recipe;
 import be.jossart.javabeans.RecipeGender;
+import be.jossart.javabeans.RecipeStep;
 
 public class RecipeDAO extends DAO<Recipe> {
     public RecipeDAO() {
@@ -90,6 +94,27 @@ public class RecipeDAO extends DAO<Recipe> {
         json.put("name", obj.getName());
         json.put("recipeGender", obj.getRecipeGender().toString());
         json.put("idPerson", obj.getPerson().getIdPerson());
+
+        JSONArray ingredientsArray = new JSONArray();
+        for (Map.Entry<Double, Ingredient> entry : obj.getRecipeIngredientList().entrySet()) {
+            Ingredient ingredient = entry.getValue();
+            JSONObject ingredientJson = new JSONObject();
+            ingredientJson.put("id", ingredient.getIdIngredient());
+            ingredientJson.put("name", ingredient.getName());
+            ingredientJson.put("type", ingredient.getType().toString());
+            ingredientJson.put("quantity", entry.getKey());
+            ingredientsArray.put(ingredientJson);
+        }
+        json.put("ingredients", ingredientsArray);
+
+        JSONArray stepsArray = new JSONArray();
+        for (RecipeStep step : obj.getRecipeStepList()) {
+            JSONObject stepJson = new JSONObject();
+            stepJson.put("id", step.getIdRecipeStep());
+            stepJson.put("instruction", step.getInstruction());
+            stepsArray.put(stepJson);
+        }
+        json.put("steps", stepsArray);
 
         try {
             ClientResponse res = this.resource
@@ -162,17 +187,45 @@ public class RecipeDAO extends DAO<Recipe> {
             if (res.getStatus() == 200) {
                 String response = res.getEntity(String.class);
                 JSONObject json = new JSONObject(response);
-
+                System.out.println(json + "++++++++++++++++");
                 int recipeId = json.getInt("idRecipe");
                 String name = json.getString("name");
                 String gender = json.getString("recipeGender");
-                int idPerson = json.getInt("idPerson");
-
+                JSONObject personJson = json.getJSONObject("person");
+                int idPerson = personJson.getInt("idPerson");
                 Person person = new Person(idPerson, null, null, null, null);
                 RecipeGender recipeGender = RecipeGender.valueOf(gender);
 
-                Recipe recipe = new Recipe(recipeId, name, person, recipeGender, null, null);
+                Recipe recipe = new Recipe(recipeId, name, person, recipeGender, new HashMap<>(), new ArrayList<>());
+                
+                JSONObject ingredientsJson = json.getJSONObject("recipeIngredientList");
+                HashMap<Double, Ingredient> recipeIngredientList = new HashMap<>();
+                for (String key : ingredientsJson.keySet()) {
+                    double quantity = Double.parseDouble(key);
+                    JSONObject ingredientJson = ingredientsJson.getJSONObject(key);
 
+                    int idIngredient = ingredientJson.getInt("idIngredient");
+                    String ingredientName = ingredientJson.getString("name");
+                    String ingredientTypeStr = ingredientJson.getString("type");
+                    IngredientType ingredientType = IngredientType.valueOf(ingredientTypeStr);
+                    
+                    Ingredient ingredient = new Ingredient(idIngredient, ingredientName, ingredientType, null);
+                    recipeIngredientList.put(quantity, ingredient);
+                }
+                recipe.setRecipeIngredientList(recipeIngredientList);
+                
+                JSONArray stepsJsonArray = json.getJSONArray("recipeStepList");
+                ArrayList<RecipeStep> recipeStepList = new ArrayList<>();
+                for (int i = 0; i < stepsJsonArray.length(); i++) {
+                    JSONObject stepJson = stepsJsonArray.getJSONObject(i);
+                    int idRecipeStep = stepJson.getInt("idRecipeStep");
+                    String instruction = stepJson.getString("instruction");
+
+                    RecipeStep step = new RecipeStep(idRecipeStep, instruction, null);
+                    recipeStepList.add(step);
+                }
+                recipe.setRecipeStepList(recipeStepList);
+                
                 return recipe;
             } else if (res.getStatus() == 404) {
                 return null;

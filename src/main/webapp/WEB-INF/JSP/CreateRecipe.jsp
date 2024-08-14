@@ -7,7 +7,7 @@
 </head>
 <body>
 	<%@ include file="LogoutPartialView.jsp" %>
-    <a href="/ProjectJEE2024Client/LogInServlet">Home Page</a>
+    <a class="btn btn-primary" href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
     <%if (request.getAttribute("success") != null) {%>
        <div class="alert alert-success">
        <p><%= request.getAttribute("success")%></p> 

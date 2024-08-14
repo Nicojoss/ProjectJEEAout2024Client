@@ -3,7 +3,8 @@ package be.jossart.servlets;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,101 +22,55 @@ public class ChangeRecipeServlet extends HttpServlet {
     public ChangeRecipeServlet() {
         super();
     }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        int idRecipe = Integer.parseInt(request.getParameter("idRecipe"));
-        HttpSession session = request.getSession(false);
-        Person person = (Person) session.getAttribute("person");
-        if (session == null || person == null) {
-        	getServletContext().getRequestDispatcher("/WEB-INF/JSP/LogIn.jsp").forward(request, response);
-        	return;
-        }
-        
-        List<Integer> idsRecipe = Recipe.findIds(person.getIdPerson());
-        if(!idsRecipe.contains(idRecipe))
-        {
-        	request.setAttribute("fail", "Failed to update the recipe.");
-        	getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
-        }
-        
-        Recipe recipe = Recipe.find(idRecipe);
-        //List<Integer> idsRecipeIngredients = RecipeIngredient.findIds(idRecipe);
-        List<Integer> idsRecipeSteps = RecipeStep.findIds(idRecipe);
-
-        ArrayList<RecipeStep> recipeSteps = new ArrayList<>();
-
-        //for (int idRecipeIngredient : idsRecipeIngredients) {
-            //RecipeIngredient recipeIngredient = RecipeIngredient.find(idRecipe,idRecipeIngredient);
-
-            //Ingredient ingredient = Ingredient.find(recipeIngredient.getIdIngredient());
-            //recipeIngredient.setIngredient(ingredient);
-
-            //recipeIngredients.add(recipeIngredient);
-        //}
-
-        for (int idRecipeStep : idsRecipeSteps) {
-            RecipeStep recipeStep = RecipeStep.find(idRecipeStep);
-            recipeSteps.add(recipeStep);
-        }
-
-        //recipe.setRecipeIngredientList(recipeIngredients);
-        recipe.setRecipeStepList(recipeSteps);
-        request.setAttribute("recipe", recipe);
-
-        getServletContext().getRequestDispatcher("/WEB-INF/JSP/ChangeRecipe.jsp").forward(request, response);
-    }
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("person") == null) {
-        	getServletContext().getRequestDispatcher("/WEB-INF/JSP/LogIn.jsp").forward(request, response);
-        	return;
-        }
-        
-        int recipeId = Integer.parseInt(request.getParameter("recipeId"));
+    	
+        int recipeId = Integer.parseInt(request.getParameter("idRecipe"));
         String recipeName = request.getParameter("recipeName");
-        RecipeGender recipeGender = RecipeGender.valueOf(request.getParameter("recipeGender"));
-
+        String recipeGenderStr = request.getParameter("recipeGender");
+        RecipeGender recipeGender = RecipeGender.valueOf(recipeGenderStr);
+        
+        HttpSession session = request.getSession();
         Person person = (Person) session.getAttribute("person");
         
-        Recipe updatedRecipe = new Recipe(recipeId, recipeName, person, recipeGender, null, null);
-        boolean recipeUpdated = updatedRecipe.update();
-
-        if (recipeUpdated) {
-            String[] ingredientNames = request.getParameterValues("ingredientName");
-            String[] ingredientTypes = request.getParameterValues("ingredientType");
-            String[] ingredientQuantities = request.getParameterValues("ingredientQuantity");
-            for (int i = 0; i < ingredientNames.length; i++) {
-                String ingredientName = ingredientNames[i];
-                IngredientType ingredientType = IngredientType.valueOf(ingredientTypes[i]);
-                double ingredientQuantity = Double.parseDouble(ingredientQuantities[i]);
-
-                Ingredient ingredient = new Ingredient();
-                ingredient.setName(ingredientName);
-                ingredient.setType(ingredientType);
-                ingredient.create();
-                ingredient = Ingredient.findId(ingredient);
-
-                //RecipeIngredient recipeIngredient = new RecipeIngredient(recipeId, ingredient.getIdIngredient(), ingredientQuantity, ingredient, updatedRecipe);
-                //recipeIngredient.update();
-            }
-
-            String[] stepInstructions = request.getParameterValues("stepInstruction");
-            if(ingredientNames == null ||ingredientTypes == null || 
-            		ingredientQuantities == null ||stepInstructions == null)
-            {
-	        	request.setAttribute("fail", "Failed to update the recipe. Please try again.");
-	        	getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
-	        }
-            for (String stepInstruction : stepInstructions) {
-                RecipeStep recipeStep = new RecipeStep(0, stepInstruction, updatedRecipe);
-                recipeStep.update();
-            }
-            request.setAttribute("success", "Recipe updated successfully!");
-            getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
-        } else {
-            request.setAttribute("fail", "Failed to update the recipe. Please try again.");
-            getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
+        HashMap<Double, Ingredient> recipeIngredientList = new HashMap<>();
+        
+        int ingredientCount = Integer.parseInt(request.getParameter("ingredientCount").trim());
+        for (int i = 0; i < ingredientCount; i++) {
+        	int idIngredient = Integer.parseInt(request.getParameter("idIngredient" + i).trim());
+            String ingredientName = request.getParameter("ingredientName" + i);
+            String ingredientTypeStr = request.getParameter("ingredientType" + i);
+            IngredientType ingredientType = IngredientType.valueOf(ingredientTypeStr);
+            double ingredientQuantity = Double.parseDouble(request.getParameter("ingredientQuantity" + i));
+            
+            Ingredient ingredient = new Ingredient(idIngredient, ingredientName, ingredientType, null);
+            recipeIngredientList.put(ingredientQuantity, ingredient);
+        }
+        
+        ArrayList<RecipeStep> recipeStepList = new ArrayList<>();
+        String stepCountStr = request.getParameter("stepCount");
+        int stepCount = stepCountStr != null ? Integer.parseInt(stepCountStr.trim()) : 0;
+        
+        for (int i = 0; i < stepCount; i++) {
+        	int idStep = Integer.parseInt(request.getParameter("idStep" + i).trim());
+            String stepInstruction = request.getParameter("stepInstruction" + i);
+            RecipeStep step = new RecipeStep(idStep, stepInstruction, null);
+            recipeStepList.add(step);
+        }
+        
+        Recipe recipe = new Recipe(recipeId, recipeName, person, recipeGender, recipeIngredientList, recipeStepList);
+        
+        if(recipe.update()) {
+        	request.setAttribute("success", "Success to update the recipe.");
+        	getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
+            return;
+        }else {
+        	request.setAttribute("fail", "Fail to update the recipe.");
+        	getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);
+            return;
         }
     }
 }

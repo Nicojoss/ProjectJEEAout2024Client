@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <a class="btn btn-link mt-3" href="/ProjectJEEAout2024Client/home">Home Page</a>
+        <a class="btn btn-primary" href="/ProjectJEEAout2024Client/home">Home Page</a>
         <% if (request.getAttribute("success") != null) { %>
             <div class="alert alert-success mt-3">
                 <p><%= request.getAttribute("success") %></p>

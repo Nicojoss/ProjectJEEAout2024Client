@@ -39,6 +39,10 @@
   	<filter-name>LoginFilter</filter-name>
   	<servlet-name>ConsultOwnRecipeServlet</servlet-name>
   </filter-mapping>
+  <filter-mapping>
+  	<filter-name>LoginFilter</filter-name>
+  	<servlet-name>EditRecipeServlet</servlet-name>
+  </filter-mapping>
   
   <!-- SERVLETS -->
   <servlet>
@@ -88,6 +92,10 @@
   <servlet>
   	<servlet-name>ConsultOwnRecipeServlet</servlet-name>
   	<servlet-class>be.jossart.servlets.ConsultOwnRecipeServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>EditRecipeServlet</servlet-name>
+  	<servlet-class>be.jossart.servlets.EditRecipeServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>HomeServlet</servlet-name>
@@ -149,5 +157,9 @@
   <servlet-mapping>
   	<servlet-name>RecipeDetailsServlet</servlet-name>
   	<url-pattern>/RecipeDetailsServlet</url-pattern>
-  </servlet-mapping>	
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>EditRecipeServlet</servlet-name>
+  	<url-pattern>/EditRecipeServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

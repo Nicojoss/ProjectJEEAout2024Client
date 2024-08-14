@@ -29,6 +29,7 @@ public class Ingredient implements Serializable{
 		this.type = type;
 		this.recipeList = recipeList;
 	}
+	
 	//METHODS
 	public boolean create() {
 		return ingredientDAO.create(this);

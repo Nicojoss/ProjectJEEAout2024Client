@@ -21,6 +21,11 @@ public class RecipeStep implements Serializable{
 		this.instruction = instruction;
 		this.recipe = recipe;
 	}
+	public RecipeStep(int idRecipeStep, Recipe recipe, String instruction) {
+		this.idRecipeStep = idRecipeStep;
+		this.recipe = recipe;
+		this.instruction = instruction;
+	}
 	//METHODS
 	public boolean create() {
 		return recipeStepDAO.create(this);

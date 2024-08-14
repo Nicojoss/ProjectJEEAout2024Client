@@ -6,8 +6,10 @@
     <title>Add ingredients and recipe step number for your recipe</title>
 </head>
 <body>
-	<%@ include file="LogoutPartialView.jsp" %>
-    <a href="/ProjectJEE2023Client/LogInServlet">Home Page</a>
+	<div class="d-flex justify-content-start mb-3">
+        <a class="btn btn-primary" href="/ProjectJEEAout2024Client/HomeServlet">Home Page</a>
+        <jsp:include page="LogoutPartialView.jsp" />
+    </div>
     <%if (request.getAttribute("success") != null) {%>
        <div class="alert alert-success">
        <p><%= request.getAttribute("success")%></p> 

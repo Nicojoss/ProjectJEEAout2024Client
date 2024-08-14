@@ -27,9 +27,8 @@
                     <td><%= recipe.getName() %></td>
                     <td><%= recipe.getRecipeGender() %></td>
                     <td>
-                        <a href="ChangeRecipeServlet?idRecipe=<%= recipe.getIdRecipe() %>">Edit</a>
-                        &nbsp;
-                        <a href="RemoveRecipeServlet?idRecipe=<%= recipe.getIdRecipe() %>">Delete</a>
+                        <a class="btn btn-warning" href="EditRecipeServlet?idRecipe=<%= recipe.getIdRecipe() %>">Edit</a>
+                        <a class="btn btn-danger" href="RemoveRecipeServlet?idRecipe=<%= recipe.getIdRecipe() %>">Delete</a>
                     </td>
                 </tr>
             <% } %>
