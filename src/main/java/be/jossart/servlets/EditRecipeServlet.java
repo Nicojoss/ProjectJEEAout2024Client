@@ -19,7 +19,6 @@ public class EditRecipeServlet extends HttpServlet {
         
         int idRecipe = Integer.parseInt(request.getParameter("idRecipe"));
         Recipe recipe = Recipe.find(idRecipe);
-        System.out.println("+++++" + recipe);
         if (recipe == null) {
             request.setAttribute("fail", "Recipe not found.");
             getServletContext().getRequestDispatcher("/WEB-INF/JSP/Home.jsp").forward(request, response);

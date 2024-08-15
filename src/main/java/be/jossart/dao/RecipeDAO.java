@@ -56,7 +56,6 @@ public class RecipeDAO extends DAO<Recipe> {
     }
 
     public boolean Delete(int recipe_id) {
-    	System.out.println("id recipe " + recipe_id);
     	MultivaluedMap<String, String> paramsDelete = new MultivaluedMapImpl();
     	paramsDelete.add("id", String.valueOf(recipe_id));
         try {
@@ -64,7 +63,6 @@ public class RecipeDAO extends DAO<Recipe> {
                     .path("recipe/"+recipe_id)
                     .accept(MediaType.APPLICATION_JSON)
                     .delete(ClientResponse.class,paramsDelete);
-            System.out.println("resultat api = " + res.getStatus()) ;
             return res.getStatus() == 200;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -132,7 +130,6 @@ public class RecipeDAO extends DAO<Recipe> {
 	public List<Recipe> findRecipe(String recherche){
 		String responseJSON = this.resource.path("recipe/search/"+String.valueOf(recherche)).accept(MediaType.APPLICATION_JSON).get(String.class);
 		List<Recipe> recipes = new ArrayList<Recipe>();
-		System.out.println("json : " + responseJSON);
 		JSONArray array = new JSONArray(responseJSON);
 		ObjectMapper mapper = new ObjectMapper();
 		for(int i =0;i<array.length();i++) {
@@ -155,7 +152,6 @@ public class RecipeDAO extends DAO<Recipe> {
 	public List<Recipe> findUserRecipe(int personId){
 		String responseJSON = this.resource.path("recipe/personRecipes/"+Integer.valueOf(personId)).accept(MediaType.APPLICATION_JSON).get(String.class);
 		List<Recipe> recipes = new ArrayList<Recipe>();
-		System.out.println("json : " + responseJSON);
 		JSONArray array = new JSONArray(responseJSON);
 		ObjectMapper mapper = new ObjectMapper();
 		for(int i =0;i<array.length();i++) {
@@ -187,7 +183,6 @@ public class RecipeDAO extends DAO<Recipe> {
             if (res.getStatus() == 200) {
                 String response = res.getEntity(String.class);
                 JSONObject json = new JSONObject(response);
-                System.out.println(json + "++++++++++++++++");
                 int recipeId = json.getInt("idRecipe");
                 String name = json.getString("name");
                 String gender = json.getString("recipeGender");
